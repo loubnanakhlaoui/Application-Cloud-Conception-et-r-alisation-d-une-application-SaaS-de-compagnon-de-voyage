@@ -1,9 +1,33 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import GoogleMapReact from 'google-map-react';
 import { Paper, useMediaQuery, Typography, Rating } from '@mui/material';
 import { LocationOn } from '@mui/icons-material';
 
-const Map = () => {
+const Map = ({setCoordinates,setBounds,coordinates}) => {
+  
+
+  useEffect(() => {
+    const getLocation = async () => {
+      try {
+        const response = await navigator.geolocation.getCurrentPosition(
+          (position) => {
+            setCoordinates({
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+            });
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getLocation();
+  }, []);
+
   const isMobile = useMediaQuery('(min-width:600px)');
   
   const mapContainerStyle = {
@@ -32,7 +56,7 @@ const Map = () => {
   const pointerStyle = {
     cursor: 'pointer',
   };
-  const coordinates= { lat:0 , lng:0 };
+  
   return (
     <div style={mapContainerStyle}>
       <GoogleMapReact
@@ -42,7 +66,11 @@ const Map = () => {
         defaultZoom={14}
         margin={[50, 50, 50, 50]}
         options={''}
-        onChange={''}
+        onChange={(e) => {
+          setCoordinates({ lat: e.center.lat , lng: e.center.lng});
+          setBounds({ ne:e.marginBounds.ne,sw:e.marginBounds.sw})
+
+        }}
         onChildClick={''}
       />
       <Paper elevation={3} style={cardStyle}>

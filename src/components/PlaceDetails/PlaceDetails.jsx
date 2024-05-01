@@ -3,18 +3,17 @@ import { Box, Typography, Button, Card, CardMedia, CardContent, CardActions, Chi
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PhoneIcon from '@mui/icons-material/Phone';
 
-const PlaceDetails = ({ place, selected, refProp }) => {
-  if (selected) refProp?.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
+const PlaceDetails = ({ place }) => {
+  console.log(place);
   return (
-    <Card elevation={6} sx={{ height: '100%' }}>
+    <Card elevation={6}>
       <CardMedia
         component="img"
         height="350"
         image={place.photo ? place.photo.images.large.url : 'https://www.foodserviceandhospitality.com/wp-content/uploads/2016/09/Restaurant-Placeholder-001.jpg'}
         alt={place.name}
       />
-      <CardContent sx={{ flexGrow: 1 }}>
+      <CardContent>
         <Typography gutterBottom variant="h5" component="div">
           {place.name}
         </Typography>
@@ -35,8 +34,8 @@ const PlaceDetails = ({ place, selected, refProp }) => {
           </Typography>
         </Box>
         {place?.awards?.map((award) => (
-          <Box display="flex" justifyContent="space-between" my={1} alignItems="center">
-            <img src={award.images.small} style={{ width: '50px', height: '30px' }} />
+          <Box key={award.display_name} display="flex" justifyContent="space-between" my={1} alignItems="center">
+            <img src={award.images.small} style={{ width: '50px', height: '30px' }} alt={award.display_name} />
             <Typography variant="subtitle2" color="textSecondary">{award.display_name}</Typography>
           </Box>
         ))}
