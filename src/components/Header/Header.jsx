@@ -1,9 +1,17 @@
 import React, { useState } from 'react';
 import { AppBar, Toolbar, Typography, InputBase, Box, FormControl, Select, MenuItem } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import { Autocomplete } from '@react-google-maps/api';
 
-const Header = ({ type, setType, rating, setRating }) => {
+const Header = ({ type, setType, rating, setRating , setCoordinates }) => {
+  const [autocomplete,setAutocomplete]=useState(null);
   const [localRating, setLocalRating] = useState('');
+  const onLoad=(autoC)=> setAutocomplete(autoC);
+  const onPlaceChanged=()=>{
+    const lat=autocomplete.getPlace().geometry.location.lat();
+    const lng=autocomplete.getPlace().geometry.location.lng();
+    setCoordinates({lat,lng});
+  }
 
   const handleRatingChange = (event) => {
     setLocalRating(event.target.value);
@@ -20,7 +28,9 @@ const Header = ({ type, setType, rating, setRating }) => {
           <Typography variant="h6" sx={{ marginRight: '1em' }}>
             Explore new places
           </Typography>
+          <Autocomplete onLoad={onLoad} onPlaceChanged={onPlaceChanged}>
           <Box sx={{ position: 'relative' }}>
+          
             <SearchIcon
               sx={{
                 position: 'absolute',
@@ -41,6 +51,7 @@ const Header = ({ type, setType, rating, setRating }) => {
               }}
             />
           </Box>
+          </Autocomplete>
         </Box>
       </Toolbar>
     </AppBar>

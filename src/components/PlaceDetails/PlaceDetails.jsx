@@ -3,7 +3,8 @@ import { Box, Typography, Button, Card, CardMedia, CardContent, CardActions, Chi
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PhoneIcon from '@mui/icons-material/Phone';
 
-const PlaceDetails = ({ place }) => {
+const PlaceDetails = ({ place,selected,refProp }) => {
+  if (selected) refProp?.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   console.log(place);
   return (
     <Card elevation={6}>

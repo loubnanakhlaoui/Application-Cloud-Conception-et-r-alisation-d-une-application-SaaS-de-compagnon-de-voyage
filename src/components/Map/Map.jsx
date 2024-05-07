@@ -3,9 +3,7 @@ import GoogleMapReact from 'google-map-react';
 import { Paper, useMediaQuery, Typography, Rating } from '@mui/material';
 import { LocationOn } from '@mui/icons-material';
 
-const Map = ({setCoordinates,setBounds,coordinates}) => {
-  
-
+const Map = ({ setCoordinates, setBounds, coordinates, places ,setChildClicked}) => {
   useEffect(() => {
     const getLocation = async () => {
       try {
@@ -28,11 +26,12 @@ const Map = ({setCoordinates,setBounds,coordinates}) => {
     getLocation();
   }, []);
 
-  const isMobile = useMediaQuery('(min-width:600px)');
+  const isMobile = useMediaQuery('(max-width:600px)');
   
+
   const mapContainerStyle = {
     height: '85vh',
-    width: '200%', 
+    width: '210%', 
   };
 
   const cardStyle = {
@@ -40,7 +39,7 @@ const Map = ({setCoordinates,setBounds,coordinates}) => {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
-    width: '1050px',
+    width: '150px', 
     elevation: 3,
   };
 
@@ -56,7 +55,7 @@ const Map = ({setCoordinates,setBounds,coordinates}) => {
   const pointerStyle = {
     cursor: 'pointer',
   };
-  
+
   return (
     <div style={mapContainerStyle}>
       <GoogleMapReact
@@ -67,16 +66,38 @@ const Map = ({setCoordinates,setBounds,coordinates}) => {
         margin={[50, 50, 50, 50]}
         options={''}
         onChange={(e) => {
-          setCoordinates({ lat: e.center.lat , lng: e.center.lng});
-          setBounds({ ne:e.marginBounds.ne,sw:e.marginBounds.sw})
-
+          setCoordinates({ lat: e.center.lat, lng: e.center.lng });
+          setBounds({ ne: e.marginBounds.ne, sw: e.marginBounds.sw });
         }}
-        onChildClick={''}
-      />
+        onChildClick={(child) => setChildClicked(child)}
+      >
+        {places?.map((place, i) => (
+          <div
+            key={i}
+            style={markerContainerStyle}
+            lat={Number(place.latitude)}
+            lng={Number(place.longitude)}
+            
+          >
+            {isMobile? (
+              <LocationOn color="primary" fontSize="large" />
+            ) : (
+              <Paper elevation={3}>
+                <Typography variant="subtitle2" gutterBottom>
+                  {place.name}
+                </Typography>
+                <img
+                  style={pointerStyle}
+                  src={place.photo? place.photo.images.small.url : ''}
+                  alt={place.name}
+                />
+              </Paper>
+            )}
+          </div>
+        ))}
+      </GoogleMapReact>
       <Paper elevation={3} style={cardStyle}>
-        <LocationOn color="primary" fontSize="large" />
-        <Typography variant="h6">Location Details</Typography>
-        <Rating name="read-only" value={4.5} readOnly />
+        <LocationOn color="primary" fontSize="small" />
       </Paper>
     </div>
   );
