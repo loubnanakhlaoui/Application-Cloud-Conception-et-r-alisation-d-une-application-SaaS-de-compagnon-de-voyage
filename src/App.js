@@ -21,17 +21,7 @@ const App = () => {
     });
   }, []);
 
-  {/*useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        setCoordinates({ lat: position.coords.latitude, lng: position.coords.longitude });
-      },
-      (error) => {
-        console.error(error);
-      }
-    );
-  }, []);
-*/}
+  
 useEffect(() => {
   const filtered = places.filter((place) => Number(place.rating) > rating);
 
